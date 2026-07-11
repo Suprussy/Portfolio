@@ -23,15 +23,15 @@ function closeMenu() {
 
 <template>
   <header
-    class="sticky top-0 z-10 border-b border-neutral-200 bg-white/80 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/80"
+    class="fixed inset-x-0 top-0 z-50 border-b border-neutral-200 bg-white/80 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/80"
     @keydown.escape="closeMenu"
   >
     <nav aria-label="Primary" class="relative mx-auto flex max-w-4xl items-center justify-between px-4 py-4 sm:px-6">
       <a
         href="#"
-        class="rounded-sm font-semibold text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 dark:text-neutral-100 dark:focus-visible:outline-neutral-100"
+        class="rounded-sm font-logo text-lg font-semibold tracking-[0.01em] text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 dark:text-neutral-100 dark:focus-visible:outline-neutral-100"
       >
-        Your Name
+        SUPRUSSY
       </a>
 
       <button

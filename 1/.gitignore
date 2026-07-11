@@ -25,3 +25,6 @@ dist-ssr
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Large local video assets — served from a CDN/object storage in production
+public/videos/
