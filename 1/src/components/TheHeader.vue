@@ -23,13 +23,13 @@ function closeMenu() {
 
 <template>
   <header
-    class="fixed inset-x-0 top-0 z-50 border-b border-neutral-200 bg-white/80 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/80"
+    class="fixed inset-x-0 top-0 z-50"
     @keydown.escape="closeMenu"
   >
-    <nav aria-label="Primary" class="relative mx-auto flex max-w-4xl items-center justify-between px-4 py-4 sm:px-6">
+    <nav aria-label="Primary" class="relative mx-auto flex h-[84px] max-w-4xl items-center justify-between px-6">
       <a
         href="#"
-        class="rounded-sm font-logo text-lg font-semibold tracking-[0.01em] text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 dark:text-neutral-100 dark:focus-visible:outline-neutral-100"
+        class="rounded-sm font-logo text-2xl font-normal tracking-[0.01em] text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 dark:text-neutral-100 dark:focus-visible:outline-neutral-100"
       >
         SUPRUSSY
       </a>
@@ -37,17 +37,17 @@ function closeMenu() {
       <button
         ref="menuButton"
         type="button"
-        class="rounded-sm p-2 text-neutral-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 sm:hidden dark:text-neutral-300 dark:focus-visible:outline-neutral-100"
+        class="flex h-[34px] w-[34px] items-center justify-center border-2 border-black bg-white text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 sm:hidden"
         :aria-expanded="isMenuOpen"
         aria-controls="primary-nav-menu"
         @click="toggleMenu"
       >
         <span class="sr-only">{{ isMenuOpen ? 'Close menu' : 'Open menu' }}</span>
-        <svg v-if="!isMenuOpen" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        <svg v-if="!isMenuOpen" class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h14M3 15h14" />
         </svg>
-        <svg v-else class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        <svg v-else class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 15L15 5M5 5l10 10" />
         </svg>
       </button>
 
