@@ -118,10 +118,14 @@ function closeMenu() {
           'sm:static sm:inset-auto sm:z-auto sm:flex sm:shrink-0 sm:flex-row sm:gap-6 sm:bg-transparent sm:font-sans sm:text-sm sm:font-normal sm:text-neutral-600 sm:opacity-100 sm:pointer-events-auto dark:sm:bg-transparent dark:sm:text-neutral-400',
         ]"
       >
-        <li v-for="link in links" :key="link.href">
+        <li v-for="(link, index) in links" :key="link.href" class="overflow-hidden sm:overflow-visible">
           <a
             :href="link.href"
-            class="block rounded-sm px-2 py-2 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 sm:px-0 sm:py-0 dark:hover:text-neutral-100 dark:focus-visible:outline-neutral-100"
+            :class="[
+              'block rounded-sm px-2 py-2 transition-transform duration-500 ease-out hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 sm:translate-y-0 sm:px-0 sm:py-0 sm:transition-none dark:hover:text-neutral-100 dark:focus-visible:outline-neutral-100',
+              isMenuOpen ? 'translate-y-0' : 'translate-y-full',
+            ]"
+            :style="{ transitionDelay: isMenuOpen ? `${index * 80}ms` : '0ms' }"
             @click="closeMenu"
           >
             {{ link.label }}

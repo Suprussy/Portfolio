@@ -46,11 +46,68 @@ function bindVideoRef(el: Element | null, index: number) {
   videoRefs.value[index] = el instanceof HTMLVideoElement ? el : null
 }
 
+// Drives goTo's scroll manually (instead of scrollIntoView's native smooth
+// behavior) so its timing curve can match the page-number transition exactly
+// — same duration, same easing — instead of drifting out of sync with it.
+const NAV_TRANSITION_MS = 320
+
+function easeOutCubic(t: number) {
+  return 1 - (1 - t) ** 3
+}
+
+let scrollAnimationId: number | null = null
+const isNavAnimating = ref(false)
+
+function animateScrollTo(offset: number) {
+  const container = containerRef.value
+  if (!container) return
+  if (scrollAnimationId !== null) cancelAnimationFrame(scrollAnimationId)
+
+  const start = container.scrollTop
+  const change = offset - start
+  const startTime = performance.now()
+
+  // The container also has CSS `scroll-behavior: smooth` (Tailwind's
+  // scroll-smooth) for other native scrolling; left on here, every scrollTop
+  // write below would itself get re-eased by the browser on top of our own
+  // easing, compounding into a sluggish, delayed-feeling motion.
+  container.style.scrollBehavior = 'auto'
+  container.style.scrollSnapType = 'none'
+  isNavAnimating.value = true
+
+  function step(now: number) {
+    const t = Math.min(1, (now - startTime) / NAV_TRANSITION_MS)
+    container!.scrollTop = start + change * easeOutCubic(t)
+    if (t < 1) {
+      scrollAnimationId = requestAnimationFrame(step)
+    } else {
+      scrollAnimationId = null
+      container!.style.scrollSnapType = ''
+      container!.style.scrollBehavior = ''
+      isNavAnimating.value = false
+    }
+  }
+
+  scrollAnimationId = requestAnimationFrame(step)
+}
+
 function jumpTo(extendedIndex: number) {
   const container = containerRef.value
   const target = sectionRefs.value[extendedIndex]
   if (!container || !target) return
   const offset = target.offsetTop
+
+  // The infinite-loop wrap can land here while animateScrollTo's own rAF
+  // loop is still mid-flight (its threshold-0.98 trigger and our
+  // animation's tail end land around the same moment). Left running, that
+  // loop would keep overwriting scrollTop from its now-stale start/target,
+  // fighting this instant jump and making the scroll blow past several
+  // sections at once.
+  if (scrollAnimationId !== null) {
+    cancelAnimationFrame(scrollAnimationId)
+    scrollAnimationId = null
+    isNavAnimating.value = false
+  }
 
   // Reaching here mid-way through the button/scroll-snap's own smooth
   // animation can leave that animation still in flight; it then keeps
@@ -184,18 +241,31 @@ onBeforeUnmount(() => {
   observer?.disconnect()
   containerRef.value?.removeEventListener('scroll', onScroll)
   window.removeEventListener('resize', updateParallax)
+  if (scrollAnimationId !== null) cancelAnimationFrame(scrollAnimationId)
 })
 
 function goTo(extendedIndex: number) {
-  sectionRefs.value[extendedIndex]?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  const target = sectionRefs.value[extendedIndex]
+  if (!target) return
+  animateScrollTo(target.offsetTop)
 }
 
+const navDirection = ref<'next' | 'prev'>('next')
+
 function goPrev() {
-  goTo(activeExtendedIndex.value - 1)
+  if (isNavAnimating.value) return
+  navDirection.value = 'prev'
+  const target = activeExtendedIndex.value - 1
+  setActiveVideo(target)
+  goTo(target)
 }
 
 function goNext() {
-  goTo(activeExtendedIndex.value + 1)
+  if (isNavAnimating.value) return
+  navDirection.value = 'next'
+  const target = activeExtendedIndex.value + 1
+  setActiveVideo(target)
+  goTo(target)
 }
 </script>
 
@@ -230,34 +300,46 @@ function goNext() {
       </section>
     </div>
 
-    <div
-      class="fixed right-4 bottom-4 z-40 flex flex-col items-center gap-2 rounded-full bg-black/40 px-2 py-3 text-white backdrop-blur sm:right-6 sm:bottom-6"
-    >
-      <button
-        type="button"
-        class="rounded-full p-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-        aria-label="Previous section"
-        @click="goPrev"
-      >
-        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M18 15l-6-6-6 6" />
-        </svg>
-      </button>
+    <div class="fixed right-6 bottom-[25px] z-40 flex items-center gap-3">
+      <div class="flex h-[68px] flex-col items-center justify-between text-black" aria-live="polite">
+        <div class="relative h-4 w-4 overflow-hidden">
+          <Transition :name="navDirection === 'next' ? 'slide-up' : 'slide-down'">
+            <span
+              :key="displayIndex"
+              :style="{ transitionDuration: `${NAV_TRANSITION_MS}ms` }"
+              class="absolute inset-0 flex items-center justify-center text-xs font-medium tabular-nums"
+            >
+              {{ displayIndex }}
+            </span>
+          </Transition>
+        </div>
+        <span class="h-[28px] w-px bg-black" aria-hidden="true"></span>
+        <span class="text-xs font-medium tabular-nums">{{ realCount }}</span>
+      </div>
 
-      <span class="text-xs font-medium tabular-nums" aria-live="polite">
-        {{ displayIndex }} / {{ realCount }}
-      </span>
+      <div class="flex flex-col">
+        <button
+          type="button"
+          class="flex h-[34px] w-[34px] items-center justify-center border-2 border-black bg-white text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+          aria-label="Previous section"
+          @click="goPrev"
+        >
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12l5-5 5 5" />
+          </svg>
+        </button>
 
-      <button
-        type="button"
-        class="rounded-full p-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-        aria-label="Next section"
-        @click="goNext"
-      >
-        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6" />
-        </svg>
-      </button>
+        <button
+          type="button"
+          class="flex h-[34px] w-[34px] items-center justify-center border-2 border-t-0 border-black bg-white text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+          aria-label="Next section"
+          @click="goNext"
+        >
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 8l5 5 5-5" />
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -270,5 +352,33 @@ function goNext() {
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+.slide-down-enter-active,
+.slide-down-leave-active,
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition-property: transform, opacity;
+  transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.slide-down-enter-from {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.slide-down-leave-to {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.slide-up-enter-from {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.slide-up-leave-to {
+  transform: translateY(-100%);
+  opacity: 0;
 }
 </style>
