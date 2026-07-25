@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { RouterView } from 'vue-router'
 import TheHeader from './components/TheHeader.vue'
-import VideoSections from './components/VideoSections.vue'
 import TheFooter from './components/TheFooter.vue'
 </script>
 
@@ -15,7 +15,7 @@ import TheFooter from './components/TheFooter.vue'
   <TheHeader />
 
   <main id="main-content" tabindex="-1" class="focus:outline-none">
-    <VideoSections />
+    <RouterView />
   </main>
 
   <TheFooter />

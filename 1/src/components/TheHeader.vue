@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { ref, useTemplateRef } from 'vue'
+import { ref, computed, useTemplateRef } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
 
-const links = [
+const route = useRoute()
+const isHome = computed(() => route.path === '/')
+
+const links: { label: string; href?: string; to?: string }[] = [
   { label: 'eXperience', href: '#experience' },
-  { label: 'About', href: '#about' },
+  { label: 'About', to: '/about' },
   { label: 'Contact', href: '#contact' },
 ]
 
@@ -72,14 +76,15 @@ function closeMenu() {
     @keydown.escape="closeMenu"
   >
     <nav aria-label="Primary" class="relative mx-auto flex h-[84px] max-w-4xl items-center px-6">
-      <a
-        href="#"
+      <RouterLink
+        to="/"
         class="relative z-50 shrink-0 rounded-sm font-logo text-2xl font-normal tracking-[0.01em] text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 dark:text-neutral-100 dark:focus-visible:outline-neutral-100"
       >
         SUPRUSSY
-      </a>
+      </RouterLink>
 
       <div
+        v-if="isHome"
         class="mx-4 flex h-full min-w-0 flex-1 items-center overflow-hidden"
         :class="{ invisible: isMenuOpen }"
         role="text"
@@ -94,6 +99,7 @@ function closeMenu() {
           <span class="pr-16">{{ dailyVerse }}</span>
         </div>
       </div>
+      <div v-else class="mx-4 flex-1"></div>
 
       <button
         ref="menuButton"
@@ -113,13 +119,26 @@ function closeMenu() {
       <ul
         id="primary-nav-menu"
         :class="[
-          'fixed inset-0 z-40 flex flex-col items-center justify-center gap-2 bg-white/95 font-nav text-[15.5vw] font-bold text-black opacity-0 transition-opacity duration-300 ease-in-out dark:bg-neutral-950/95 dark:text-neutral-100',
+          'fixed inset-0 z-40 flex flex-col items-center justify-center gap-2 bg-white/95 text-[15.5vw] font-bold text-black opacity-0 transition-opacity duration-300 ease-in-out dark:bg-neutral-950/95 dark:text-neutral-100',
           isMenuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none',
-          'sm:static sm:inset-auto sm:z-auto sm:flex sm:shrink-0 sm:flex-row sm:gap-6 sm:bg-transparent sm:font-sans sm:text-sm sm:font-normal sm:text-neutral-600 sm:opacity-100 sm:pointer-events-auto dark:sm:bg-transparent dark:sm:text-neutral-400',
+          'sm:static sm:inset-auto sm:z-auto sm:flex sm:shrink-0 sm:flex-row sm:gap-6 sm:bg-transparent sm:text-sm sm:font-normal sm:text-neutral-600 sm:opacity-100 sm:pointer-events-auto dark:sm:bg-transparent dark:sm:text-neutral-400',
         ]"
       >
-        <li v-for="(link, index) in links" :key="link.href" class="overflow-hidden sm:overflow-visible">
+        <li v-for="(link, index) in links" :key="link.to ?? link.href" class="overflow-hidden sm:overflow-visible">
+          <RouterLink
+            v-if="link.to"
+            :to="link.to"
+            :class="[
+              'block rounded-sm px-2 py-2 transition-transform duration-500 ease-out hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 sm:translate-y-0 sm:px-0 sm:py-0 sm:transition-none dark:hover:text-neutral-100 dark:focus-visible:outline-neutral-100',
+              isMenuOpen ? 'translate-y-0' : 'translate-y-full',
+            ]"
+            :style="{ transitionDelay: isMenuOpen ? `${index * 80}ms` : '0ms' }"
+            @click="closeMenu"
+          >
+            {{ link.label }}
+          </RouterLink>
           <a
+            v-else
             :href="link.href"
             :class="[
               'block rounded-sm px-2 py-2 transition-transform duration-500 ease-out hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 sm:translate-y-0 sm:px-0 sm:py-0 sm:transition-none dark:hover:text-neutral-100 dark:focus-visible:outline-neutral-100',

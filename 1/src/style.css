@@ -2,7 +2,7 @@
 
 @theme {
   --font-logo: 'Poppins', ui-sans-serif, system-ui, sans-serif;
-  --font-nav: 'Roboto', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Roboto', 'Pretendard', ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
@@ -11,6 +11,7 @@
 
 html {
   scroll-behavior: smooth;
+  word-break: keep-all;
 }
 
 @media (prefers-reduced-motion: reduce) {
