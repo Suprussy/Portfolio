@@ -5,6 +5,10 @@ import { RouterLink, useRoute } from 'vue-router'
 const route = useRoute()
 const isHome = computed(() => route.path === '/')
 
+function isCurrentPage(link: { to?: string }) {
+  return link.to !== undefined && link.to === route.path
+}
+
 const links: { label: string; href?: string; to?: string }[] = [
   { label: 'eXperience', href: '#experience' },
   { label: 'About', to: '/about' },
@@ -78,7 +82,7 @@ function closeMenu() {
     <nav aria-label="Primary" class="relative mx-auto flex h-[84px] max-w-4xl items-center px-6">
       <RouterLink
         to="/"
-        class="relative z-50 shrink-0 rounded-sm font-logo text-2xl font-normal tracking-[0.01em] text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 dark:text-neutral-100 dark:focus-visible:outline-neutral-100"
+        class="relative z-50 shrink-0 rounded-sm font-logo text-2xl font-normal tracking-[0.01em] text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 dark:text-neutral-100 dark:focus-visible:outline-neutral-100"
       >
         SUPRUSSY
       </RouterLink>
@@ -131,6 +135,7 @@ function closeMenu() {
             :class="[
               'block rounded-sm px-2 py-2 transition-transform duration-500 ease-out hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 sm:translate-y-0 sm:px-0 sm:py-0 sm:transition-none dark:hover:text-neutral-100 dark:focus-visible:outline-neutral-100',
               isMenuOpen ? 'translate-y-0' : 'translate-y-full',
+              isCurrentPage(link) ? 'opacity-40' : '',
             ]"
             :style="{ transitionDelay: isMenuOpen ? `${index * 80}ms` : '0ms' }"
             @click="closeMenu"

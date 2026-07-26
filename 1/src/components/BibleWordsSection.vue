@@ -63,18 +63,23 @@ onBeforeUnmount(() => {
       <li
         v-for="entry in entries"
         :key="entry.word"
-        class="leading-none text-neutral-900 dark:text-neutral-100"
+        class="leading-none text-black dark:text-neutral-100"
         style="font-size: 10.5vw; font-weight: 300"
       >
         {{ entry.word }}
       </li>
     </ul>
 
-    <div ref="track" class="scrollbar-hide flex snap-x snap-mandatory overflow-x-auto scroll-smooth">
+    <div
+      ref="track"
+      class="scrollbar-hide -mx-6 flex snap-x snap-mandatory overflow-x-auto scroll-smooth sm:-mx-10"
+    >
       <div v-for="entry in entries" :key="entry.word" class="flex w-full shrink-0 snap-center justify-center px-6">
-        <div class="w-full max-w-xl text-left text-[9px] text-neutral-900 sm:text-[11px] dark:text-neutral-100">
+        <div class="w-full max-w-xl text-left text-[9px] text-black sm:text-[11px] dark:text-neutral-100">
           <p class="mb-4" style="font-size: 1.75em; font-weight: 700">{{ entry.word }}</p>
-          <p style="font-size: 1.75em">{{ entry.verse }} ({{ entry.reference }})</p>
+          <p style="font-size: 1.75em">
+            {{ entry.verse }} <span class="whitespace-nowrap">({{ entry.reference }})</span>
+          </p>
         </div>
       </div>
     </div>

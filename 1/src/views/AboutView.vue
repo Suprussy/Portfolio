@@ -74,7 +74,7 @@ onBeforeUnmount(() => {
     <section class="relative">
       <div
         ref="wrapper"
-        class="relative z-20 w-full overflow-visible select-none leading-none text-neutral-900 dark:text-neutral-100"
+        class="relative z-20 w-full overflow-visible select-none leading-none text-black dark:text-neutral-100"
         aria-hidden="true"
       >
         <span ref="letter" class="font-logo inline-block origin-top-left font-thin" style="font-size: 40vw">S</span>
