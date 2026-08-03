@@ -58,7 +58,10 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section class="bg-white px-6 pt-0 pb-24 dark:bg-neutral-950 sm:px-10 sm:pb-32">
+  <section
+    class="bg-white px-6 pt-0 dark:bg-neutral-950 sm:px-10"
+    style="padding-bottom: calc(29vmin + 9vmax)"
+  >
     <ul class="relative z-20 -mt-12 mb-16 flex flex-col gap-4 sm:mb-24 sm:gap-6">
       <li
         v-for="entry in entries"

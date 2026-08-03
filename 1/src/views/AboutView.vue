@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, useTemplateRef } from 'vue'
 import BibleWordsSection from '../components/BibleWordsSection.vue'
+import BioSection from '../components/BioSection.vue'
 
 // Local dev serves from public/videos; production points at a CDN/object
 // store (e.g. Cloudflare R2) via VITE_VIDEO_BASE_URL since the raw clips
@@ -93,5 +94,6 @@ onBeforeUnmount(() => {
     </section>
 
     <BibleWordsSection />
+    <BioSection />
   </div>
 </template>
