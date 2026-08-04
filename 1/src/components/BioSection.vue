@@ -4,6 +4,14 @@ const paragraphs = [
   '웹퍼블리셔로 다시 경력을 이어갔지만, 나이와 환경의 벽으로 재취업은 쉽지 않았습니다. 구직이 길어지는 동안에도 공부를 계속했고, AI의 발전 속에서 웹퍼블리싱이 새로운 전환점을 맞이하고 있음을 체감했습니다. 신앙생활을 통해 1년의 유예기간을 가지며, 그동안 배운 것을 정리한 결과물이 바로 이 웹사이트입니다.',
   '현재는 생활비를 위해 파트타임으로 일하며, 내년에는 반드시 새로운 도전을 시작하기 위해 준비하고 있습니다. 걱정도 있지만, 기도와 노력으로 더 나은 변화를 만들어가고자 합니다.',
 ]
+
+const career = [
+  { year: '2026', title: '끼니', desc: '집밥구독 끼니 배송기사' },
+  { year: '2025', title: '자격증 취득', desc: '화물운송 종사자격증 취득' },
+  { year: '2024', title: '프리랜서', desc: '프리랜서 웹퍼블리셔' },
+  { year: '2023', title: '바른웹', desc: '바른웹 웹퍼블리셔' },
+  { year: '2016', title: '바른웹', desc: '바른웹 웹퍼블리셔' },
+]
 </script>
 
 <template>
@@ -23,6 +31,17 @@ const paragraphs = [
       >
         {{ paragraph }}
       </p>
+    </div>
+
+    <div class="flex flex-col" style="margin-top: calc(29vmin + 9vmax); gap: 6vmin">
+      <div v-for="entry in career" :key="entry.year + entry.title">
+        <p class="text-black dark:text-neutral-100" style="font-size: 3.5vw; font-weight: 700">
+          {{ entry.year }} {{ entry.title }}
+        </p>
+        <p class="text-black dark:text-neutral-100" style="font-size: 3.5vw; font-weight: 200">
+          {{ entry.desc }}
+        </p>
+      </div>
     </div>
   </section>
 </template>
