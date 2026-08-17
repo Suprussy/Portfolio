@@ -7,6 +7,7 @@ import BioIntro from '../components/BioIntro.vue'
 import LogoGrid from '../components/LogoGrid.vue'
 import CareerSection from '../components/CareerSection.vue'
 import ExperienceLink from '../components/ExperienceLink.vue'
+import ProjectSlider from '../components/ProjectSlider.vue'
 </script>
 
 <template>
@@ -34,5 +35,16 @@ import ExperienceLink from '../components/ExperienceLink.vue'
 
     <!-- 링크 -->
     <ExperienceLink />
+
+    <!-- 프로젝트 리뷰 슬라이더 -->
+    <section class="relative">
+      <h2
+        class="relative z-10 px-6 leading-tight text-black dark:text-neutral-100 sm:px-10"
+        style="font-size: 9.15vw; font-weight: 700; margin-bottom: -6vw"
+      >
+        Where Amazing Happens<br />This Is Why We Play
+      </h2>
+      <ProjectSlider class="relative z-0" />
+    </section>
   </div>
 </template>
