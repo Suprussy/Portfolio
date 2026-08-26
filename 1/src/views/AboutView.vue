@@ -8,6 +8,8 @@ import LogoGrid from '../components/LogoGrid.vue'
 import CareerSection from '../components/CareerSection.vue'
 import ExperienceLink from '../components/ExperienceLink.vue'
 import ProjectSlider from '../components/ProjectSlider.vue'
+import ContactLink from '../components/ContactLink.vue'
+import SiteFooter from '../components/SiteFooter.vue'
 </script>
 
 <template>
@@ -46,5 +48,11 @@ import ProjectSlider from '../components/ProjectSlider.vue'
       </h2>
       <ProjectSlider class="relative z-0" />
     </section>
+
+    <!-- 링크 -->
+    <ContactLink />
+
+    <!-- 푸터 -->
+    <SiteFooter />
   </div>
 </template>
