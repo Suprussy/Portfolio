@@ -4,20 +4,20 @@ const year = new Date().getFullYear()
 
 <template>
   <footer
-    class="grid bg-white px-6 text-black dark:bg-neutral-950 dark:text-neutral-100 sm:grid-cols-3 sm:px-10"
-    style="padding-top: calc(14vmin + 4vmax); padding-bottom: calc(14vmin + 4vmax); gap: 6vmin"
+    class="grid bg-white text-black dark:bg-neutral-950 dark:text-neutral-100 sm:grid-cols-3"
+    style="border-top: 1px solid #bdbdbd; padding: 20% 6vmin"
   >
     <div>
       <a
         href="https://www.instagram.com/nuevayork_01"
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-block"
-        style="font-size: calc(1.8vw + 10px); font-weight: 700"
+        class="block text-center"
+        style="font-size: 7.4vmin; font-weight: 700"
       >
         Instagram
       </a>
-      <address class="not-italic" style="margin-top: 4vmin; font-size: calc(1.6vw + 8px); font-weight: 200">
+      <address class="not-italic" style="margin-top: 20%; font-size: 4.2vw; font-weight: 400">
         SUPRUSSY,<br />
         11 Olympic-ro 35ga-gil,<br />
         Songpa-gu, Seoul<br />
@@ -25,21 +25,23 @@ const year = new Date().getFullYear()
       </address>
     </div>
 
-    <div>
-      <a href="mailto:suprussy73@gmail.com" class="block" style="font-size: calc(1.8vw + 10px); font-weight: 700">
+    <div style="margin-top: 20%; font-size: 4.2vw; font-weight: 400">
+      <span class="block">E-mail</span>
+      <a
+        href="mailto:suprussy73@gmail.com"
+        class="block"
+        style="margin-bottom: 5%; font-size: 1.45em; font-weight: 700"
+      >
         suprussy73@gmail.com
       </a>
-      <a
-        href="tel:+821031099789"
-        class="block"
-        style="margin-top: 4vmin; font-size: calc(1.6vw + 8px); font-weight: 200"
-      >
+      <span class="block">Phone</span>
+      <a href="tel:+821031099789" class="block" style="font-size: 1.45em; font-weight: 700">
         +82. 10. 3109. 9789
       </a>
     </div>
 
-    <div class="flex items-end sm:justify-end">
-      <small style="font-size: calc(1.2vw + 8px); font-weight: 200">© {{ year }} Suprussy. All rights reserved.</small>
+    <div class="flex items-end sm:justify-end" style="margin-top: 20%">
+      <small style="font-size: 3.5vw; font-weight: 700; opacity: 0.3">© {{ year }} Suprussy. All rights reserved.</small>
     </div>
   </footer>
 </template>
